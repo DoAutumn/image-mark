@@ -1,0 +1,70 @@
+.ant-image-preview {
+  pointer-events: initial;
+}
+
+.tip {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.ant-image-preview-operations {
+  padding-right: 20px;
+}
+
+.temp-rect, .rect {
+  position: absolute;
+  border: 1px solid red;
+
+  &.mouseover {
+    background: rgba(255, 0, 0, 0.3);
+  }
+}
+
+.rect-box {
+  position: absolute;
+  width: 320px;
+  height: 100%;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  background-color: #fff;
+  padding: 30px 0 10px;
+  overflow-y: auto;
+
+  .anticon {
+    cursor: pointer;
+
+    &:hover {
+      color: #1890ff;
+    }
+
+    &.anticon-close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+    }
+  }
+
+  .rect-info {
+    padding: 20px;
+    border-bottom: solid 1px #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      input {
+        flex: 1;
+        margin-right: 5px;
+      }
+    }
+  }
+}

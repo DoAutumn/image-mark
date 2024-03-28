@@ -1,0 +1,83 @@
+<div class="ant-image-preview">
+  <span class="tip">默认可以拖拽、缩放图片，锁定图片之后可以进行框选</span>
+  <ul class="ant-image-preview-operations">
+    <li
+      class="ant-image-preview-operations-operation"
+      [class.ant-image-preview-operations-operation-disabled]="zoomOutDisabled && option.type === 'zoomOut'"
+      (click)="option.onClick()"
+      *ngFor="let option of operations"
+      >
+      <span class="ant-image-preview-operations-icon" nz-icon [nzType]="option.icon" nzTheme="outline"></span>
+    </li>
+    <li
+      class="ant-image-preview-operations-operation"
+      (click)="isDragDisabled = !isDragDisabled"
+      >
+      <span class="ant-image-preview-operations-icon" nz-icon [nzType]="isDragDisabled ? 'lock' : 'unlock'" nzTheme="outline"></span>
+    </li>
+  </ul>
+  <div
+    class="ant-image-preview-img-wrapper"
+    cdkDrag
+    [cdkDragDisabled]="isDragDisabled"
+    [cdkDragFreeDragPosition]="position"
+    (mousedown)="onDragStarted($event)"
+    (cdkDragReleased)="onDragReleased()"
+    >
+    <ng-container *ngFor="let image of images; index as imageIndex">
+      <img
+        cdkDragHandle
+        class="ant-image-preview-img"
+        #imgRef
+        *ngIf="index === imageIndex"
+        [attr.draggable]="!isDragDisabled"
+        [attr.src]="image.src"
+        [attr.srcset]="image.srcset"
+        [attr.alt]="image.alt"
+        [style.width]="image.width"
+        [style.height]="image.height"
+        [style.transform]="previewImageTransform"
+      />
+    </ng-container>
+  </div>
+  <ng-container *ngIf="images.length > 1">
+    <div
+      class="ant-image-preview-switch-left"
+      [class.ant-image-preview-switch-left-disabled]="index <= 0"
+      (click)="onSwitchLeft($event)"
+      >
+      <span nz-icon nzType="left" nzTheme="outline"></span>
+    </div>
+    <div
+      class="ant-image-preview-switch-right"
+      [class.ant-image-preview-switch-right-disabled]="index >= images.length - 1"
+      (click)="onSwitchRight($event)"
+      >
+      <span nz-icon nzType="right" nzTheme="outline"></span>
+    </div>
+  </ng-container>
+
+  <div
+    *ngIf="tempRect.w > 0 && tempRect.h > 0"
+    class="temp-rect"
+    [ngStyle]="{ left: tempRect.x + 'px', top: tempRect.y + 'px', width: tempRect.w + 'px', height: tempRect.h + 'px' }"
+    >
+  </div>
+
+  <div
+    *ngFor="let rect of rects"
+    class="rect"
+    [class.mouseover]="rect.mouseover"
+    [ngStyle]="{ left: rect.x + 'px', top: rect.y + 'px', width: rect.w + 'px', height: rect.h + 'px' }"
+    >
+  </div>
+
+  <div *ngIf="rectBoxVisible" class="rect-box">
+    <span nz-icon nzType="close" nzTheme="outline" (click)="rectBoxVisible = false;"></span>
+    <div *ngFor="let rect of rects" class="rect-info" (mouseover)="rect.mouseover = true;" (mouseout)="rect.mouseover = false;">
+      <p>标记信息：<input nz-input [(ngModel)]="rect.name" /><span nz-icon nzType="delete" nzTheme="outline"></span></p>
+      <p><span>左上：({{ rect.relativeX }}, {{ rect.relativeY }})</span><span>右上：({{ rect.relativeX + rect.w }}, {{ rect.relativeY }})</span></p>
+      <p><span>左下：({{ rect.relativeX }}, {{ rect.relativeY + rect.h }})</span> <span>右下：({{ rect.relativeX + rect.w }}, {{ rect.relativeY + rect.h }})</span></p>
+    </div>
+  </div>
+</div>
